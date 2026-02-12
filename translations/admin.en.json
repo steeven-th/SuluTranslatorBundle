@@ -1,0 +1,12 @@
+{
+    "itech_world.translator.translate_field": "Translate field",
+    "itech_world.translator.undo_translation": "Undo translation",
+    "itech_world.translator.bulk_translate": "Translate all",
+    "itech_world.translator.bulk_dialog_title": "Translate all fields?",
+    "itech_world.translator.bulk_dialog_text": "This will translate all text fields into the currently selected language using DeepL.",
+    "itech_world.translator.error": "Translation failed. Please try again.",
+    "itech_world.translator.config_title": "DeepL Usage Statistics",
+    "itech_world.translator.usage_text": "{characterCount} out of {characterLimit} characters used",
+    "itech_world.translator.refresh": "Refresh statistics",
+    "itech_world.translator.deepl_dashboard": "Manage DeepL Account"
+}

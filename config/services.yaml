@@ -1,0 +1,29 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    itech_world.sulu_translator.deepl_service:
+        class: ItechWorld\SuluTranslatorBundle\Service\DeeplTranslationService
+        arguments:
+            $deeplApiKey: '%itech_world_sulu_translator.deepl_api_key%'
+
+    itech_world.sulu_translator.admin:
+        class: ItechWorld\SuluTranslatorBundle\Admin\TranslatorAdmin
+        arguments:
+            - '@sulu_admin.view_builder_factory'
+        tags:
+            - { name: 'sulu.admin' }
+            - { name: 'sulu.context', context: 'admin' }
+
+    ItechWorld\SuluTranslatorBundle\Controller\Admin\TranslationController:
+        autowire: true
+        autoconfigure: true
+        public: true
+        arguments:
+            $localeMapping: '%itech_world_sulu_translator.locale_mapping%'
+        tags:
+            - { name: 'controller.service_arguments' }
+
+    # Alias for type-hinted injection
+    ItechWorld\SuluTranslatorBundle\Service\DeeplTranslationService: '@itech_world.sulu_translator.deepl_service'

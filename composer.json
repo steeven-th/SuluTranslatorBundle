@@ -1,0 +1,23 @@
+{
+    "name": "itech-world/sulu-translator-bundle",
+    "description": "DeepL translation integration for Sulu CMS 3.x admin interface",
+    "type": "sulu-bundle",
+    "license": "MIT",
+    "keywords": ["sulu", "deepl", "translation", "cms", "admin"],
+    "require": {
+        "php": "^8.2",
+        "sulu/sulu": "^3.0",
+        "deeplcom/deepl-php": "^1.7",
+        "symfony/framework-bundle": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ItechWorld\\SuluTranslatorBundle\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-dev": "1.0.x-dev"
+        }
+    }
+}

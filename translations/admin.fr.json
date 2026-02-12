@@ -1,0 +1,12 @@
+{
+    "itech_world.translator.translate_field": "Traduire le champ",
+    "itech_world.translator.undo_translation": "Annuler la traduction",
+    "itech_world.translator.bulk_translate": "Tout traduire",
+    "itech_world.translator.bulk_dialog_title": "Traduire tous les champs ?",
+    "itech_world.translator.bulk_dialog_text": "Cela va traduire tous les champs texte dans la langue actuellement sélectionnée via DeepL.",
+    "itech_world.translator.error": "La traduction a échoué. Veuillez réessayer.",
+    "itech_world.translator.config_title": "Statistiques d'utilisation DeepL",
+    "itech_world.translator.usage_text": "{characterCount} sur {characterLimit} caractères utilisés",
+    "itech_world.translator.refresh": "Actualiser les statistiques",
+    "itech_world.translator.deepl_dashboard": "Gérer le compte DeepL"
+}
