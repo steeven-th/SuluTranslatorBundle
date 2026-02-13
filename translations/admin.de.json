@@ -1,0 +1,17 @@
+{
+    "itech_world.translator.translate_field": "Feld übersetzen",
+    "itech_world.translator.undo_translation": "Übersetzung rückgängig machen",
+    "itech_world.translator.bulk_translate": "Alle übersetzen",
+    "itech_world.translator.bulk_dialog_title": "Alle Felder übersetzen?",
+    "itech_world.translator.bulk_dialog_text": "Alle Textfelder werden mit DeepL in die aktuell ausgewählte Sprache übersetzt.",
+    "itech_world.translator.error": "Übersetzung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "itech_world.translator.config_title": "DeepL-Nutzungsstatistiken",
+    "itech_world.translator.usage_text": "{characterCount} von {characterLimit} Zeichen verwendet",
+    "itech_world.translator.refresh": "Statistiken aktualisieren",
+    "itech_world.translator.deepl_dashboard": "DeepL-Konto verwalten",
+    "itech_world.translator.settings_title": "DeepL Übersetzer",
+    "itech_world.translator.account_type": "Kontotyp",
+    "itech_world.translator.account_free": "Kostenlos",
+    "itech_world.translator.account_pro": "Pro",
+    "itech_world.translator.billing_period": "Abrechnungszeitraum"
+}

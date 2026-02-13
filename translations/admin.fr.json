@@ -8,5 +8,10 @@
     "itech_world.translator.config_title": "Statistiques d'utilisation DeepL",
     "itech_world.translator.usage_text": "{characterCount} sur {characterLimit} caractères utilisés",
     "itech_world.translator.refresh": "Actualiser les statistiques",
-    "itech_world.translator.deepl_dashboard": "Gérer le compte DeepL"
+    "itech_world.translator.deepl_dashboard": "Gérer le compte DeepL",
+    "itech_world.translator.settings_title": "DeepL Traducteur",
+    "itech_world.translator.account_type": "Type de compte",
+    "itech_world.translator.account_free": "Gratuit",
+    "itech_world.translator.account_pro": "Pro",
+    "itech_world.translator.billing_period": "Période de facturation"
 }

@@ -1,10 +1,10 @@
 {
-    "name": "sulu-itech-world-sulu-translator-bundle",
-    "version": "1.0.0",
-    "description": "DeepL translation integration for Sulu CMS admin",
-    "main": "assets/admin/index.js",
-    "private": true,
-    "peerDependencies": {
-        "sulu-admin-bundle": "*"
-    }
+  "name": "sulu-itech-world-sulu-translator-bundle",
+  "description": "DeepL translation integration for Sulu CMS admin",
+  "license": "MIT",
+  "main": "public/js/index.js",
+  "private": true,
+  "peerDependencies": {
+    "sulu-admin-bundle": "*"
+  }
 }

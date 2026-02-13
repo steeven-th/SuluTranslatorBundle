@@ -1,11 +1,11 @@
 // @flow
 import React from 'react';
 import {observer} from 'mobx-react';
-import {action, observable} from 'mobx';
+// mobx observer is used via the @observer decorator
 import {translate} from 'sulu-admin-bundle/utils/Translator';
 import Icon from 'sulu-admin-bundle/components/Icon';
 import Loader from 'sulu-admin-bundle/components/Loader';
-import './translator.css';
+import '../../translator.css';
 
 type Props = {
     onClick: () => void,
@@ -19,7 +19,7 @@ type Props = {
  * Translation button component displayed on translatable fields.
  *
  * Shows a translate icon by default, a spinner during translation,
- * and an undo icon after translation is applied.
+ * and after translation: a green checkmark + a red undo button side by side.
  */
 @observer
 class TranslatorButton extends React.Component<Props> {
@@ -42,14 +42,22 @@ class TranslatorButton extends React.Component<Props> {
 
         if (hasTranslation) {
             return (
-                <button
-                    className="translator-button translator-button--undo"
-                    onClick={onUndo}
-                    title={translate('itech_world.translator.undo_translation')}
-                    type="button"
-                >
-                    <Icon name="su-undo" />
-                </button>
+                <div className="translator-button-group">
+                    <div
+                        className="translator-button translator-button--success"
+                        title={translate('itech_world.translator.translate_field')}
+                    >
+                        <Icon name="su-check" />
+                    </div>
+                    <button
+                        className="translator-button translator-button--undo"
+                        onClick={onUndo}
+                        title={translate('itech_world.translator.undo_translation')}
+                        type="button"
+                    >
+                        <Icon name="su-process" />
+                    </button>
+                </div>
             );
         }
 

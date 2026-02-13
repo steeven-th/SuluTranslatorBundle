@@ -20,7 +20,7 @@ import translatorQueueStore from '../../stores/translatorQueueStore';
  * @param {React.ComponentType} WrappedComponent The original Sulu field component
  * @returns {React.ComponentType} Enhanced component with translation button
  */
-export default function withTranslatorButton(WrappedComponent: any) {
+export default function withTranslatorButton(WrappedComponent: any, isHtml: boolean = false) {
     @observer
     class WithTranslatorButton extends React.Component<any> {
         @observable _loading = false;
@@ -86,6 +86,7 @@ export default function withTranslatorButton(WrappedComponent: any) {
             Requester.post('/admin/api/translator/translate', {
                 text: value,
                 target: locale,
+                html: isHtml,
             }).then(action((response) => {
                 if (response.translation) {
                     onChange(response.translation);
@@ -130,8 +131,11 @@ export default function withTranslatorButton(WrappedComponent: any) {
             const hasContent = value !== undefined && value !== null && value !== '';
             const locale = this._getTargetLocale();
 
+            const wrapperClass = 'translator-field-wrapper'
+                + (isHtml ? ' translator-field-wrapper--editor' : '');
+
             return (
-                <div className="translator-field-wrapper">
+                <div className={wrapperClass}>
                     <WrappedComponent {...this.props} />
                     {hasContent && locale && (
                         <TranslatorButton

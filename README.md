@@ -30,13 +30,19 @@ SuluTranslatorBundle integrates [DeepL](https://www.deepl.com/) automatic transl
 * **Target language** automatically set to the locale selected in the admin dropdown
 * **Undo button** to revert a translation to the previous value
 * **HTML preservation** for rich text fields (CKEditor content)
-* **DeepL usage statistics** page in admin settings
+* **DeepL usage statistics** page in admin settings (account type, billing period, character usage)
+* **Permission-based access** to the statistics page via Sulu role system
 * **Pages and articles** support
 
 ## 🇬🇧 Available translations
 
 * English
 * French
+* German
+
+## 📦 Dependencies
+
+* [Deepl PHP](https://github.com/DeepLcom/deepl-php)
 
 ## 📝 Installation
 
@@ -90,7 +96,17 @@ Edit the `assets/admin/app.js` to add the bundle in imports:
 import 'sulu-itech-world-sulu-translator-bundle';
 ```
 
-#### Step 4: Build admin assets
+#### Step 4: ***BACK*** & Build admin assets
+
+Edit the `assets/admin/package.json` to add the bundle to the list of bundles:
+```json
+{
+    "dependencies": {
+        // ...
+      "sulu-itech-world-sulu-translator-bundle": "file:../../vendor/itech-world/sulu-translator-bundle",
+    }
+}
+```
 
 In the `assets/admin/` folder, run the following command:
 
@@ -112,26 +128,6 @@ yarn build
 php bin/adminconsole cache:clear
 ```
 
-## ⚙️ Configuration Reference
-
-```yaml
-itech_world_sulu_translator:
-    # Required: Your DeepL API key
-    deepl_api_key: "%env(DEEPL_API_KEY)%"
-
-    # Optional: Map Sulu locales to DeepL language codes
-    # Useful when Sulu uses short codes (e.g. "en") but DeepL requires
-    # regional variants (e.g. "en-GB" or "en-US")
-    locale_mapping:
-        en: "en-GB"     # English (British)
-        fr: "fr"        # French
-        de: "de"        # German
-        es: "es"        # Spanish
-        it: "it"        # Italian
-        nl: "nl"        # Dutch
-        pt: "pt-PT"     # Portuguese (European)
-```
-
 ## 🔤 Per-field Translation
 
 Once installed, a **translate button** (language icon) appears on every `text_line`, `text_area` and `text_editor` field in the page and article edit forms.
@@ -139,7 +135,11 @@ Once installed, a **translate button** (language icon) appears on every `text_li
 1. Select the **target language** in the Sulu locale dropdown (top of the page)
 2. Click the **translate button** on any field
 3. The field content is sent to DeepL and replaced with the translation
-4. Click the **undo button** (appears after translation) to revert to the original value
+4. A **green checkmark** confirms the translation, and a **red undo button** appears next to it to revert to the original value
+
+After translating individual fields, the green checkmark and red undo button are shown side by side:
+
+![Page with some fields translated — checkmark and undo buttons](./doc/images/page-partial-translate.png)
 
 ## 🌍 Bulk Translation
 
@@ -150,12 +150,36 @@ A **"Translate all"** button is available in the form toolbar:
 3. Confirm the action in the dialog
 4. All text fields are translated simultaneously
 
+![Bulk translate confirmation dialog](./doc/images/page-before-translate-confirm.png)
+
+![Page with all fields translated](./doc/images/page-total-translate.png)
+
+![Page before translation — translate buttons visible on each field](./doc/images/page-before-translate.png)
+
 ## 📊 DeepL Usage Statistics
 
-The bundle provides a settings view showing your DeepL API usage:
-- Characters used vs. plan limit
-- Visual progress bar with color coding (green/yellow/red)
-- Direct link to your DeepL dashboard
+The bundle provides a settings view accessible under **Settings > DeepL Translator**, showing your DeepL API usage:
+
+- **Account type** badge (Free or Pro)
+- **Billing period** dates (Pro accounts only)
+- **Characters used** vs. plan limit with a visual progress bar (green / yellow / red)
+- **Refresh** button and direct link to your DeepL dashboard
+
+![DeepL usage statistics page](./doc/images/deepl-stats.png)
+
+### Permissions
+
+Access to the statistics page is controlled by the Sulu permission system. A **"translator"** entry appears under **Settings** in the role permissions. Enable the **View** permission to grant access.
+
+![Translator permission in role settings](./doc/images/deepl-stats-permission.png)
+
+## 📋 Supported Field Types
+
+| Sulu Field Type | Support | Notes                                                                                      |
+|-----------------|---------|--------------------------------------------------------------------------------------------|
+| `text_line` | ✅ | [Single-line text input](https://docs.sulu.io/3.x/reference/property-types/text_line.html) |
+| `text_area` | ✅ | [Multi-line text area](https://docs.sulu.io/3.x/reference/property-types/text_area.html)                                                                   |
+| `text_editor` | ✅ | [Rich text](https://docs.sulu.io/3.x/reference/property-types/text_editor.html)                                                                              |
 
 ## 🔌 REST API Endpoints
 
@@ -174,15 +198,17 @@ The bundle exposes two admin API endpoints:
 {
     "text": "Bonjour le monde",
     "target": "en",
-    "source": "fr"
+    "source": "fr",
+    "html": false
 }
 ```
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `text` | string | Yes | Text content to translate (supports HTML) |
+| `text` | string | Yes | Text content to translate |
 | `target` | string | Yes | Target Sulu locale code |
 | `source` | string | No | Source language (auto-detected if omitted) |
+| `html` | boolean | No | Set to `true` for rich text fields to preserve HTML markup |
 
 **Response:**
 
@@ -199,50 +225,14 @@ The bundle exposes two admin API endpoints:
 ```json
 {
     "character_count": 42500,
-    "character_limit": 500000
+    "character_limit": 500000,
+    "account_type": "free",
+    "start_time": null,
+    "end_time": null
 }
 ```
 
-## 📋 Supported Field Types
-
-| Sulu Field Type | Support | Notes |
-|-----------------|---------|-------|
-| `text_line` | ✅ | Single-line text input |
-| `text_area` | ✅ | Multi-line text area |
-| `text_editor` | ✅ | Rich text (HTML preserved via `tag_handling: html`) |
-
-## 📁 Bundle Structure
-
-```
-SuluTranslatorBundle/
-├── config/
-│   └── services.yaml              # Service definitions
-├── src/
-│   ├── ItechWorldSuluTranslatorBundle.php   # Bundle entry point
-│   ├── Admin/
-│   │   └── TranslatorAdmin.php    # Toolbar actions registration
-│   ├── Controller/Admin/
-│   │   └── TranslationController.php  # REST API endpoints
-│   └── Service/
-│       └── DeeplTranslationService.php # DeepL API wrapper
-├── assets/admin/
-│   ├── index.js                   # JS entry point
-│   ├── translator.css             # Button styles
-│   ├── components/TranslatorButton/
-│   │   ├── TranslatorButton.js    # React button component
-│   │   └── withTranslatorButton.js # HOC for field wrapping
-│   ├── stores/
-│   │   └── translatorQueueStore.js # MobX bulk queue store
-│   └── views/
-│       ├── TranslatorToolbarAction.js  # Toolbar action
-│       └── TranslatorConfig.js    # Settings/stats view
-├── translations/
-│   ├── admin.en.json              # English translations
-│   └── admin.fr.json              # French translations
-├── composer.json
-├── package.json
-└── README.md
-```
+> **Note:** `start_time` and `end_time` are only returned for Pro accounts. Free accounts will receive `null` for these fields.
 
 ## 🐛 Bug and Idea
 
@@ -256,8 +246,9 @@ You can buy me a coffee to support me **this plugin is 100% free**.
 
 ## 👨‍💻 Contact
 
-<a href="https://steeven-th.dev"><img src="https://avatars.githubusercontent.com/u/82022828?s=96&v=4" width="48"></a>
-<a href="https://x.com/ThomasSteeven2"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Twitter_X.png/640px-Twitter_X.png" width="48"></a>
+<a href="https://steeven-th.dev"><img src="https://avatars.githubusercontent.com/u/82022828?s=96&v=4" width="50"></a>
+<a href="https://x.com/ThomasSteeven2"><img src="./doc/images/x.webp" width="50" alt="x.com"></a>
+<a href="https://www.linkedin.com/in/steeven-thomas-221b02b8/"><img src="./doc/images/linkedin.png" width="50" alt="Linkedin"></a>
 
 ## 📘&nbsp; License
 

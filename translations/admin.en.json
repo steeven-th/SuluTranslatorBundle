@@ -8,5 +8,10 @@
     "itech_world.translator.config_title": "DeepL Usage Statistics",
     "itech_world.translator.usage_text": "{characterCount} out of {characterLimit} characters used",
     "itech_world.translator.refresh": "Refresh statistics",
-    "itech_world.translator.deepl_dashboard": "Manage DeepL Account"
+    "itech_world.translator.deepl_dashboard": "Manage DeepL Account",
+    "itech_world.translator.settings_title": "DeepL Translator",
+    "itech_world.translator.account_type": "Account type",
+    "itech_world.translator.account_free": "Free",
+    "itech_world.translator.account_pro": "Pro",
+    "itech_world.translator.billing_period": "Billing period"
 }

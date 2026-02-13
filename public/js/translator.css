@@ -23,6 +23,21 @@
     transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
+/* Button group - checkmark + undo side by side after translation */
+.translator-button-group {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    z-index: 10;
+    display: flex;
+    gap: 4px;
+}
+
+.translator-button-group .translator-button {
+    position: static;
+    border-radius: 50%;
+}
+
 /* Default state - translate button */
 .translator-button--default {
     background-color: #52b6ca;
@@ -48,14 +63,21 @@
     pointer-events: none;
 }
 
-/* Undo state - revert translation */
+/* Success state - green checkmark after translation (Sulu $mantis) */
+.translator-button--success {
+    background-color: #6ac86b;
+    color: #fff;
+    cursor: default;
+}
+
+/* Undo state - red undo button (Sulu $persianRed) */
 .translator-button--undo {
-    background-color: #95a5a6;
+    background-color: #cf3939;
     color: #fff;
 }
 
 .translator-button--undo:hover {
-    background-color: #7f8c8d;
+    background-color: #b83232;
     transform: scale(1.05);
 }
 
@@ -73,8 +95,8 @@
     z-index: 5;
 }
 
-/* Adjust position for text_editor fields (below CKEditor toolbar) */
-.translator-field-wrapper .ck-editor .translator-button,
-.translator-field-wrapper [class*="textEditor"] ~ .translator-button {
-    top: 44px;
+/* text_editor fields: position buttons below the CKEditor toolbar */
+.translator-field-wrapper--editor .translator-button,
+.translator-field-wrapper--editor .translator-button-group {
+    top: 50px;
 }

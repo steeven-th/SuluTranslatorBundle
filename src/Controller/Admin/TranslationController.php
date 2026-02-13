@@ -55,13 +55,14 @@ class TranslationController extends AbstractController
         $text = (string) $data['text'];
         $targetLocale = (string) $data['target'];
         $sourceLocale = isset($data['source']) ? (string) $data['source'] : null;
+        $isHtml = !empty($data['html']);
 
         // Map Sulu locale to DeepL language code
         $targetLang = $this->mapLocale($targetLocale);
         $sourceLang = $sourceLocale !== null ? $this->mapLocale($sourceLocale) : null;
 
         try {
-            $translation = $this->deeplService->translateText($text, $sourceLang, $targetLang);
+            $translation = $this->deeplService->translateText($text, $sourceLang, $targetLang, $isHtml);
 
             return new JsonResponse(['translation' => $translation]);
         } catch (\Exception $e) {

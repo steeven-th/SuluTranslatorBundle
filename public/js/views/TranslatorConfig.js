@@ -9,13 +9,17 @@ import Loader from 'sulu-admin-bundle/components/Loader';
 /**
  * Settings view displaying DeepL API usage statistics.
  *
- * Shows a progress bar with current character usage versus the plan limit,
+ * Shows account type (Free/Pro), billing period dates (Pro only),
+ * a progress bar with current character usage versus the plan limit,
  * along with a refresh button and link to the DeepL dashboard.
  */
 @observer
 class TranslatorConfig extends React.Component<any> {
     @observable _characterCount = 0;
     @observable _characterLimit = 0;
+    @observable _accountType = null;
+    @observable _startTime = null;
+    @observable _endTime = null;
     @observable _loading = true;
     @observable _error = null;
 
@@ -34,6 +38,9 @@ class TranslatorConfig extends React.Component<any> {
             .then(action((response) => {
                 this._characterCount = response.character_count || 0;
                 this._characterLimit = response.character_limit || 0;
+                this._accountType = response.account_type || null;
+                this._startTime = response.start_time || null;
+                this._endTime = response.end_time || null;
                 this._loading = false;
             }))
             .catch(action((error) => {
@@ -41,6 +48,27 @@ class TranslatorConfig extends React.Component<any> {
                 this._error = error.message || 'Unknown error';
                 this._loading = false;
             }));
+    };
+
+    /**
+     * Formats an ISO 8601 date string to a localized date.
+     */
+    _formatDate = (isoString: ?string): string => {
+        if (!isoString) {
+            return '—';
+        }
+
+        try {
+            const date = new Date(isoString);
+
+            return date.toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+            });
+        } catch (e) {
+            return isoString;
+        }
     };
 
     render() {
@@ -54,7 +82,7 @@ class TranslatorConfig extends React.Component<any> {
 
         if (this._error) {
             return (
-                <div style={{padding: '40px', textAlign: 'center', color: '#c0392b'}}>
+                <div style={{padding: '40px', textAlign: 'center', color: '#cf3939'}}>
                     <p>{this._error}</p>
                     <button onClick={this._loadUsage} type="button" style={styles.refreshButton}>
                         {translate('itech_world.translator.refresh')}
@@ -67,9 +95,18 @@ class TranslatorConfig extends React.Component<any> {
             ? Math.round((this._characterCount / this._characterLimit) * 100)
             : 0;
 
-        const usageText = translate('itech_world.translator.usage_text')
-            .replace('{characterCount}', this._characterCount.toLocaleString())
-            .replace('{characterLimit}', this._characterLimit.toLocaleString());
+        const usageText = translate('itech_world.translator.usage_text', {
+            characterCount: this._characterCount.toLocaleString(),
+            characterLimit: this._characterLimit.toLocaleString(),
+        });
+
+        const accountLabel = this._accountType === 'free'
+            ? translate('itech_world.translator.account_free')
+            : translate('itech_world.translator.account_pro');
+
+        const accountBadgeStyle = this._accountType === 'free'
+            ? styles.badgeFree
+            : styles.badgePro;
 
         return (
             <div style={styles.container}>
@@ -77,13 +114,38 @@ class TranslatorConfig extends React.Component<any> {
                     {translate('itech_world.translator.config_title')}
                 </h2>
 
+                {/* Account type badge */}
+                {this._accountType && (
+                    <div style={styles.accountRow}>
+                        <span style={styles.label}>
+                            {translate('itech_world.translator.account_type')}
+                        </span>
+                        <span style={accountBadgeStyle}>
+                            {accountLabel}
+                        </span>
+                    </div>
+                )}
+
+                {/* Billing period (Pro accounts only) */}
+                {this._startTime && this._endTime && (
+                    <div style={styles.periodRow}>
+                        <span style={styles.label}>
+                            {translate('itech_world.translator.billing_period')}
+                        </span>
+                        <span style={styles.periodValue}>
+                            {this._formatDate(this._startTime)} — {this._formatDate(this._endTime)}
+                        </span>
+                    </div>
+                )}
+
+                {/* Usage progress bar */}
                 <div style={styles.progressContainer}>
                     <div style={styles.progressBar}>
                         <div
                             style={{
                                 ...styles.progressFill,
                                 width: `${Math.min(percentage, 100)}%`,
-                                backgroundColor: percentage > 90 ? '#c0392b' : percentage > 70 ? '#f39c12' : '#27ae60',
+                                backgroundColor: percentage > 90 ? '#cf3939' : percentage > 70 ? '#f8d200' : '#6ac86b',
                             }}
                         />
                     </div>
@@ -120,6 +182,49 @@ const styles = {
         fontWeight: '600',
         marginBottom: '24px',
         color: '#333',
+    },
+    accountRow: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+        marginBottom: '16px',
+    },
+    periodRow: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+        marginBottom: '20px',
+    },
+    label: {
+        fontSize: '14px',
+        color: '#666',
+        fontWeight: '500',
+    },
+    periodValue: {
+        fontSize: '14px',
+        color: '#333',
+    },
+    badgeFree: {
+        display: 'inline-block',
+        padding: '2px 10px',
+        borderRadius: '12px',
+        fontSize: '12px',
+        fontWeight: '600',
+        textTransform: 'uppercase',
+        letterSpacing: '0.5px',
+        backgroundColor: '#e0e0e0',
+        color: '#555',
+    },
+    badgePro: {
+        display: 'inline-block',
+        padding: '2px 10px',
+        borderRadius: '12px',
+        fontSize: '12px',
+        fontWeight: '600',
+        textTransform: 'uppercase',
+        letterSpacing: '0.5px',
+        backgroundColor: '#52b6ca',
+        color: '#fff',
     },
     progressContainer: {
         marginBottom: '24px',
