@@ -118,7 +118,7 @@ jobs:
           fi
 
           echo "📝 Generating changelog..."
-          npx conventional-changelog -p angular -i CHANGELOG.md -s
+          npx -y conventional-changelog-cli -p angular -i CHANGELOG.md -s
 
       - name: Commit and push changes
         run: |
@@ -158,7 +158,7 @@ jobs:
           echo "📝 Generating release notes..."
 
           # Generate release notes
-          npx conventional-changelog -p angular -r 1 --output-unreleased > latest-changelog.md
+          npx -y conventional-changelog-cli -p angular -r 1 --output-unreleased > latest-changelog.md
 
           # Add a note if this is a manual trigger
           if [ "${{ env.TRIGGER_TYPE }}" == "manual" ]; then
