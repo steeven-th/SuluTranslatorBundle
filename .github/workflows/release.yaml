@@ -108,10 +108,6 @@ jobs:
             git pull origin main
           fi
 
-      - name: Install dependencies
-        run: |
-          npm install --save-dev conventional-changelog-cli conventional-changelog-angular
-
       - name: Generate changelog
         run: |
           if [ ! -f CHANGELOG.md ]; then
